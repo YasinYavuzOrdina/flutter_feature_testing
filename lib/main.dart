@@ -2,11 +2,16 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feature_testing/pages/camera.dart';
 import 'package:flutter_feature_testing/pages/home.dart';
+import 'package:flutter_feature_testing/pages/map.dart';
+import 'package:flutter_feature_testing/pages/mapandcamerademo/mapdemo.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+late final List<CameraDescription> cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
+  cameras = await availableCameras();
+  await Hive.initFlutter();
   runApp(MyApp(cameras: cameras));
 }
 
@@ -28,6 +33,8 @@ class MyApp extends StatelessWidget {
         CameraPage.route: (context) => CameraPage(
               cameras: cameras,
             ),
+        MapPage.route: (context) => const MapPage(),
+        MapDemoPage.route: (context) => const MapDemoPage(),
       },
     );
   }

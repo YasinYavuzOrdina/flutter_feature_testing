@@ -32,13 +32,17 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   void initState() {
-    _initCamera(selectedCamera);
+    if (widget.cameras.isNotEmpty) {
+      _initCamera(selectedCamera);
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    _cameraController.dispose();
+    if (widget.cameras.isNotEmpty) {
+      _cameraController.dispose();
+    }
     super.dispose();
   }
 
@@ -49,105 +53,110 @@ class _CameraPageState extends State<CameraPage> {
         title: const Text('Camera'),
       ),
       drawer: buildDrawer(context, CameraPage.route),
-      body: FutureBuilder<void>(
-        future: _initCameraController,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.none) {
-            return Stack(
-                alignment: AlignmentDirectional.bottomCenter,
-                children: [
-                  CameraPreview(_cameraController),
-                  Positioned(
-                    bottom: 20,
-                    right: 20,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (captures.isEmpty) return; //Return if no image
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => GalleryScreen(
-                        //             images: capturedImages.reversed.toList())));
-                      },
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          image: captures.isNotEmpty
-                              ? DecorationImage(
-                                  image: FileImage(captures.last),
-                                  colorFilter: ColorFilter.mode(
-                                      Colors.black, BlendMode.hue),
-                                  fit: BoxFit.cover)
-                              : null,
-                        ),
-                        child: Center(
-                            child: Text(
-                          captures.length.toString(),
-                          style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 50,
-                    child: GestureDetector(
-                      onTap: () async {
-                        await _initCameraController; //To make sure camera is initialized
-                        var xFile = await _cameraController.takePicture();
-                        setState(() {
-                          captures.add(File(xFile.path));
-                        });
-                      },
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 20,
-                    top: 20,
-                    child: IconButton(
-                      onPressed: () {
-                        if (widget.cameras.length > 1) {
-                          setState(
-                            () {
-                              selectedCamera =
-                                  selectedCamera == 0 ? 1 : 0; //Switch camera
-                              _initCamera(selectedCamera);
+      body: widget.cameras.isNotEmpty
+          ? FutureBuilder<void>(
+              future: _initCameraController,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.none) {
+                  return Stack(
+                      alignment: AlignmentDirectional.bottomCenter,
+                      children: [
+                        CameraPreview(_cameraController),
+                        Positioned(
+                          bottom: 20,
+                          right: 20,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (captures.isEmpty) return; //Return if no image
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => GalleryScreen(
+                              //             images: capturedImages.reversed.toList())));
                             },
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('No secondary camera found'),
-                              duration: Duration(seconds: 2),
+                            child: Container(
+                              height: 60,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white),
+                                image: captures.isNotEmpty
+                                    ? DecorationImage(
+                                        image: FileImage(captures.last),
+                                        colorFilter: const ColorFilter.mode(
+                                            Colors.black, BlendMode.hue),
+                                        fit: BoxFit.cover)
+                                    : null,
+                              ),
+                              child: Center(
+                                  child: Text(
+                                captures.length.toString(),
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )),
                             ),
-                          );
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.switch_camera_outlined,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                ]);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 50,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await _initCameraController; //To make sure camera is initialized
+                              var xFile = await _cameraController.takePicture();
+                              setState(() {
+                                captures.add(File(xFile.path));
+                              });
+                            },
+                            child: Container(
+                              height: 60,
+                              width: 60,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 20,
+                          top: 20,
+                          child: IconButton(
+                            onPressed: () {
+                              if (widget.cameras.length > 1) {
+                                setState(
+                                  () {
+                                    selectedCamera = selectedCamera == 0
+                                        ? 1
+                                        : 0; //Switch camera
+                                    _initCamera(selectedCamera);
+                                  },
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('No secondary camera found'),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.switch_camera_outlined,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      ]);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            )
+          : const Center(
+              child: Text('No cameras on device'),
+            ),
     );
   }
 }
