@@ -3,6 +3,8 @@ import 'package:flutter_feature_testing/pages/camera.dart';
 import 'package:flutter_feature_testing/pages/home.dart';
 import 'package:flutter_feature_testing/pages/map.dart';
 import 'package:flutter_feature_testing/pages/mapandcamerademo/mapdemo.dart';
+import 'package:flutter_feature_testing/pages/pkceflow/login.dart';
+import 'package:flutter_feature_testing/pages/pkceflow/login2.dart';
 
 Widget _buildMenuItem(
     BuildContext context, Widget title, String routeName, String currentRoute) {
@@ -35,6 +37,10 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         _buildMenuItem(context, const Text('Map'), MapPage.route, currentRoute),
         _buildMenuItem(context, const Text('Map Camera Demo'),
             MapDemoPage.route, currentRoute),
+        _buildMenuItem(
+            context, const Text('PKCE Flow'), LoginPage.route, currentRoute),
+        _buildMenuItem(
+            context, const Text('PKCE Flow 2'), Login2Page.route, currentRoute),
       ],
     ),
   );

@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_feature_testing/main.dart';
+
 import 'package:flutter_feature_testing/pages/mapandcamerademo/models/infopin.model.dart';
 import 'package:flutter_feature_testing/pages/mapandcamerademo/models/pin.model.dart';
 import 'package:flutter_feature_testing/pages/mapandcamerademo/widgets/create_pin_dialog.dart';
@@ -54,7 +52,6 @@ class _MapPageState extends State<MapDemoPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('rerendered');
     return Scaffold(
       appBar: isAddingMarkers ? _buildEditingAppbar() : _buildDefaultAppbar(),
       drawer: buildDrawer(context, MapDemoPage.route),
@@ -321,7 +318,6 @@ class _MapPageState extends State<MapDemoPage> {
 
   AlertDialog _informationDialog(
       Marker currentMarker, InfoPin pin, BuildContext ctx) {
-    print(pin.pictures.length);
     return AlertDialog(
       title: const Text('Marker information'),
       content: Column(

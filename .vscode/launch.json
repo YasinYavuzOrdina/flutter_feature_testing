@@ -7,6 +7,14 @@
             "flutterMode": "release",
             "request": "launch",
             "program": "lib/main.dart"
+        },
+        {
+            "name": "prims_flutter",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-d", "chrome","--web-port", "14200",
+                //  "--web-hostname", "127.0.0.1",
+                ],
         }
     ]
 }

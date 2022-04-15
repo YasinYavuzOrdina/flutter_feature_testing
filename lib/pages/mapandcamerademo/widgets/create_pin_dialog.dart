@@ -155,7 +155,6 @@ class _CreatePinDialogState extends State<CreatePinDialog> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   children: List.generate(captures.length, (index) {
-                    print(captures.length);
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.file(captures[index]),
